@@ -5,6 +5,7 @@ authors = ["Eduard Knyshov <edvorg@gmail.com>"]
 description = "Pregenerated WebGL bindings for Rust "
 edition = "2018"
 repository = "https://github.com/edvorg/yew_audio"
+license-file = "LICENSE"
 
 [dependencies]
 yew = "0.4.0"
