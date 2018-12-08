@@ -2,7 +2,7 @@
 name = "yew_audio"
 version = "0.1.0"
 authors = ["Eduard Knyshov <edvorg@gmail.com>"]
-description = "Pregenerated WebGL bindings for Rust "
+description = "WebAudio API bindings for Yew frontend framework"
 edition = "2018"
 repository = "https://github.com/edvorg/yew_audio"
 license-file = "LICENSE"
