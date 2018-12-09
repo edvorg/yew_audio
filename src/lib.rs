@@ -153,7 +153,10 @@ impl Gain {
 impl AudioService {
     pub fn new() -> AudioService {
         AudioService {
-            context: js! { return new AudioContext(); }
+            context: js! {
+                var AudioContextContextConstructor = window.AudioContext || window.webkitAudioContext;
+                return new AudioContextContextConstructor();
+            }
         }
     }
 
