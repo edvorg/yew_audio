@@ -97,7 +97,7 @@ impl GetUserMedia {
             )
         };
         js! {
-            @{&self.js}.call(navigator, { "audio": true }, @{callback}, function() {});
+            @{&self.js}.call(null, @{callback});
         }
     }
 }
@@ -150,8 +150,8 @@ impl Gain {
     }
 }
 
-impl AudioService {
-    pub fn new() -> AudioService {
+impl Default for AudioService {
+    fn default() -> Self {
         AudioService {
             context: js! {
                 var AudioContextContextConstructor = window.AudioContext || window.webkitAudioContext;
@@ -159,7 +159,9 @@ impl AudioService {
             }
         }
     }
+}
 
+impl AudioService {
     pub fn create_oscillator(&self) -> Oscillator {
         Oscillator {
             js: js! { return @{&self.context}.createOscillator(); },
@@ -191,12 +193,21 @@ impl AudioService {
     }
 
     pub fn get_user_media(&self) -> GetUserMedia {
+        js! {
+            navigator.getUserMedia = (navigator.getUserMedia ||
+                                      navigator.webkitGetUserMedia ||
+                                      navigator.mozGetUserMedia ||
+                                      navigator.msGetUserMedia);
+        }
         GetUserMedia {
             js: js! {
-                var get_user_media = navigator.getUserMedia;
-                get_user_media = get_user_media || navigator.webkitGetUserMedia;
-                get_user_media = get_user_media || navigator.mozGetUserMedia;
-                return get_user_media
+                return (function(callback) {
+                    if (navigator.mediaDevices) { // if navigator.mediaDevices exists, use it
+                        navigator.mediaDevices.getUserMedia({audio: true}).then(callback, function () {});
+                    } else {
+                        navigator.getUserMedia({audio: true}, callback, function () {});
+                    }
+                });
             }
         }
     }
