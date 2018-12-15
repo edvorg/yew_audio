@@ -1,9 +1,9 @@
 #[macro_use]
 extern crate stdweb;
 
+use stdweb::unstable::TryInto;
 use stdweb::Value;
 use yew::prelude::*;
-use stdweb::unstable::TryInto;
 
 pub trait AudioNode {
     fn js(&self) -> &Value;
@@ -89,13 +89,7 @@ impl AudioNode for ScriptProcessor {
 
 impl GetUserMedia {
     pub fn call_audio(&self, callback: Callback<MediaStream>) {
-        let callback = move |v| {
-            callback.emit(
-                MediaStream {
-                    js: v,
-                }
-            )
-        };
+        let callback = move |v| callback.emit(MediaStream { js: v });
         js! {
             @{&self.js}.call(null, @{callback});
         }
@@ -124,18 +118,16 @@ impl InputBuffer {
     pub fn get_channel_data_buffer(&self, channel: u8) -> Vec<f64> {
         js! (
             return Array.prototype.slice.call(@{&self.js}.getChannelData(@{channel}));
-        ).try_into().unwrap()
+        )
+        .try_into()
+        .unwrap()
     }
 }
 
 impl ScriptProcessor {
     pub fn set_onaudioprocess(&self, callback: Callback<AudioProcessingEvent>) {
         let callback = move |v| {
-            callback.emit(
-                AudioProcessingEvent {
-                    js: v,
-                }
-            );
+            callback.emit(AudioProcessingEvent { js: v });
         };
         js! {
             var callback = @{callback};
@@ -156,7 +148,7 @@ impl Default for AudioService {
             context: js! {
                 var AudioContextContextConstructor = window.AudioContext || window.webkitAudioContext;
                 return new AudioContextContextConstructor();
-            }
+            },
         }
     }
 }
@@ -183,7 +175,9 @@ impl AudioService {
     pub fn sample_rate(&self) -> f64 {
         js! (
           return @{&self.context}.sampleRate;
-        ).try_into().unwrap()
+        )
+        .try_into()
+        .unwrap()
     }
 
     pub fn create_script_processor(&self, buffer_size: i32, input_channels: i32, output_channels: i32) -> ScriptProcessor {
@@ -208,7 +202,7 @@ impl AudioService {
                         navigator.getUserMedia({audio: true}, callback, function () {});
                     }
                 });
-            }
+            },
         }
     }
 
