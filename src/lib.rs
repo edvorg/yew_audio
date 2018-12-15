@@ -17,42 +17,52 @@ pub trait AudioNode {
     }
 }
 
+#[derive(PartialEq, Clone)]
 pub struct Oscillator {
     js: Value,
 }
 
+#[derive(PartialEq, Clone)]
 pub struct Gain {
     js: Value,
 }
 
+#[derive(PartialEq, Clone)]
 pub struct Destination {
     js: Value,
 }
 
+#[derive(PartialEq, Clone)]
 pub struct MediaStreamSource {
     js: Value,
 }
 
+#[derive(PartialEq, Clone)]
 pub struct ScriptProcessor {
     js: Value,
 }
 
+#[derive(PartialEq, Clone)]
 pub struct GetUserMedia {
     js: Value,
 }
 
+#[derive(PartialEq, Clone)]
 pub struct MediaStream {
     js: Value,
 }
 
+#[derive(PartialEq, Clone)]
 pub struct AudioService {
     context: Value,
 }
 
+#[derive(PartialEq, Clone)]
 pub struct AudioProcessingEvent {
     js: Value,
 }
 
+#[derive(PartialEq, Clone)]
 pub struct InputBuffer {
     js: Value,
 }
