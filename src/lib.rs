@@ -8,7 +8,7 @@ use yew::prelude::*;
 pub trait AudioNode {
     fn js(&self) -> &Value;
 
-    fn connect(&self, to: &AudioNode) {
+    fn connect(&self, to: &dyn AudioNode) {
         js! { @{&self.js()}.connect(@{to.js()}); }
     }
 
